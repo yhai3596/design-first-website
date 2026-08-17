@@ -1,10 +1,13 @@
 #!/usr/bin/env node
-// Windows driver for website-to-design-md's styleProbe extraction.
-// The vendor script (extract-browser-evidence.mjs) resolves agent-browser via
+// Cross-platform driver for website-to-design-md's styleProbe extraction.
+// Reads the SAME styleProbe out of the vendor script at runtime (no fork, no
+// drift) and drives agent-browser directly: plain `agent-browser` from PATH on
+// macOS/Linux, the real win32 exe on Windows. The win32 path exists because the
+// vendor script (extract-browser-evidence.mjs) resolves the binary via
 // `bash -lc "command -v ..."` and spawnSyncs the resulting MSYS-path shell shim,
-// which cannot work on win32. This driver reads the SAME styleProbe from the
-// vendor script at runtime (no fork/drift) and drives the real win32 exe.
+// which cannot be executed on win32.
 // Usage: node run-styleprobe.mjs <url> [outPath]
+// Env:   VENDOR_SCRIPT=<path>  override the website-to-design-md script location
 
 import fs from "node:fs";
 import os from "node:os";
@@ -98,7 +101,7 @@ function settleAndSweep() {
 
 const styleProbe = loadStyleProbe();
 const probeExpr = `JSON.stringify(${styleProbe})`;
-const results = { url, capturedAt: new Date().toISOString(), pages: {}, tooling: { mode: "agent-browser-cli-win-driver", exe, vendorScript: VENDOR_SCRIPT, session } };
+const results = { url, capturedAt: new Date().toISOString(), pages: {}, tooling: { mode: "agent-browser-cli-driver", platform: process.platform, exe, vendorScript: VENDOR_SCRIPT, session } };
 
 try {
   bootstrapDaemon();

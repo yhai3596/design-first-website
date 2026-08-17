@@ -1,5 +1,15 @@
 # CHANGELOG — design-first-website
 
+## v1.1.0 (2026-08-16)
+
+可移植化：从"作者本机能跑"变成"别人 clone 下来就能跑"。
+
+- **新增** `install.sh`：一键装编排层 + 7 个 taste 编队技能 + website-to-design-md，含 `--list` / `--force` / `--extras`，装点可用 `CLAUDE_SKILLS_DIR` 覆盖。幂等（已存在默认跳过），末尾打印 目录名→frontmatter name 对照表 + 环境自检。macOS 实测装载 9 个技能、复跑全部正确跳过。
+- **修复安装陷阱**：上游 taste-skill 有 4 个子目录名与 SKILL.md 的 `name` 不一致（`taste-skill`→`design-taste-frontend`、`redesign-skill`→`redesign-existing-projects`、`minimalist-skill`→`minimalist-ui`、`image-to-code-skill`→`image-to-code`）。Claude Code 按目录名装载，照原名 `cp` 会导致本 skill 路由表全部调不到——install.sh 按 name 重命名，README 也把手动安装的对照表列全。
+- **去本机化**：承接 v1.0.2 的 kit 公开发布，build-handoff 路线 B 重写为「公开仓库 URL 优先 → `$AI_CONTENT_SITE_KIT` 本地 clone → 都没有时的显式降级方案」（原先只有 `E:\` 硬编码）；「本机规则 5.6/5.7/5.8」等外部引用 → 就地写清规则本身；SKILL.md「本机提取通道（Windows 机实测）」→ 平台无关的「提取通道」+ 开工自检；`frontend-ui-design`/`app-dev-guide`/模板库 三项明确标注不随仓库分发、缺失即跳过。
+- **run-styleprobe.mjs 正名**：本就有非 win32 分支（`resolveAgentBrowser` 直接返回 PATH 里的 `agent-browser`），文档却一路称"Windows 驱动器"劝退了其他平台的用户。头注释与 README 改为跨平台，`tooling.mode` 改 `agent-browser-cli-driver` 并记录 `platform`。
+- **新坑记录**：`npm i -g agent-browser` 之后必须再跑 `agent-browser install` 拉 Chrome。漏了这步 `--version` 正常但 `open` 报 `Chrome not found`（macOS 实测），极易误判成"装好了"。install.sh 自检 `~/.agent-browser/browsers` 并提示补装。
+
 ## v1.0.2 (2026-08-17)
 
 第三方完整化：外部环境可完整安装并调用全链路。

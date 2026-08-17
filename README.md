@@ -16,18 +16,44 @@ P4 走查循环      浏览器双端截图对照 DESIGN.md 列 5 个具体问题
                  → ⛔ 门禁二：禁止推倒重写，素材问题走素材规格单
 ```
 
-## 安装（完整清单）
+## 安装
 
-**① 本体 + 参考站提取技能：**
+本 skill 是**编排层**，本身不干活——它把活分给一支技能编队。一键装齐编排层 + 全部编队：
+
+```bash
+git clone https://github.com/yhai3596/design-first-website.git && bash design-first-website/install.sh
+```
+
+装到 `~/.claude/skills/`（`CLAUDE_SKILLS_DIR` 可改）。脚本幂等，已存在的目录默认跳过。
+
+| 参数 | 作用 |
+|---|---|
+| `--list` | 只打印将要装什么，不写文件 |
+| `--force` | 已存在的目录一律覆盖重装（升级用） |
+| `--extras` | 额外装 taste-skill 里未被路由表引用的 6 个技能 |
+
+### 编队清单（脚本装的就是这些）
+
+| 安装后的技能名 | 来源仓库 | 仓库内目录 |
+|---|---|---|
+| `design-taste-frontend` | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) · MIT | `skills/taste-skill` |
+| `image-to-code` | 同上 | `skills/image-to-code-skill` |
+| `imagegen-frontend-web` | 同上 | `skills/imagegen-frontend-web` |
+| `imagegen-frontend-mobile` | 同上 | `skills/imagegen-frontend-mobile` |
+| `brandkit` | 同上 | `skills/brandkit` |
+| `redesign-existing-projects` | 同上 | `skills/redesign-skill` |
+| `minimalist-ui` | 同上 | `skills/minimalist-skill` |
+| `website-to-design-md` | [Paidax01/web-to-design-md](https://github.com/Paidax01/web-to-design-md) | 仓库根 |
+
+> ⚠️ taste-skill 里有 4 个子目录名和 SKILL.md frontmatter 的 `name` 对不上（`taste-skill` → `design-taste-frontend`、`redesign-skill` → `redesign-existing-projects`、`minimalist-skill` → `minimalist-ui`、`image-to-code-skill` → `image-to-code`）。Claude Code 按目录名装载，照原目录名 `cp` 会让本 skill 的路由表**静默**调不到它们。install.sh 已按上表重命名。
+
+<details>
+<summary>不想用脚本？手动装齐同样的一套</summary>
 
 ```bash
 git clone https://github.com/yhai3596/design-first-website.git ~/.claude/skills/design-first-website
 git clone https://github.com/Paidax01/web-to-design-md.git ~/.claude/skills/website-to-design-md
-```
 
-**② taste 编队 7 技能**（上游仓库的子目录名 ≠ 技能名，用映射命令一次装齐）：
-
-```bash
 git clone https://github.com/Leonxlnx/taste-skill.git ./taste-skill-src
 for pair in taste-skill:design-taste-frontend image-to-code-skill:image-to-code \
   imagegen-frontend-web:imagegen-frontend-web imagegen-frontend-mobile:imagegen-frontend-mobile \
@@ -36,25 +62,36 @@ for pair in taste-skill:design-taste-frontend image-to-code-skill:image-to-code 
 done
 ```
 
-**③ 可选**：[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)（参考站提取首选通道，`npm install -g agent-browser`；不装则走内置浏览器兜底通道）。
+</details>
 
-**④ 按需**：P3「内容平台站」路线的工程蓝图套件 [yhai3596/ai-content-site-kit](https://github.com/yhai3596/ai-content-site-kit)——施工时 clone 到项目工作区即可（模板文档库，不装进 skills 目录）；其参考实现为公开仓库 [yhai3596/alan-platform](https://github.com/yhai3596/alan-platform)。
+### 可选增强：agent-browser
 
-| 编队技能 | 来源 |
-|---|---|
-| design-taste-frontend / image-to-code / imagegen-frontend-web / imagegen-frontend-mobile / brandkit / redesign-existing-projects / minimalist-ui | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
-| website-to-design-md（参考站 → DESIGN.md 提取） | [Paidax01/web-to-design-md](https://github.com/Paidax01/web-to-design-md) |
+```bash
+npm i -g agent-browser
+agent-browser install     # 两步都要！只装 CLI 不拉 Chrome，open 会报 "Chrome not found"
+```
+
+参考站提取（P1）用 [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) 拿真实 DOM + computed styles + CSS 变量。**不装也能跑**，会自动降级到内置浏览器兜底通道（截图 + 有限探针），提取精度低一档。
+
+### 按需：内容平台站的工程蓝图
+
+P3「内容平台站」路线的下游套件 [yhai3596/ai-content-site-kit](https://github.com/yhai3596/ai-content-site-kit)——施工时 clone 到**项目工作区**即可（模板文档库，不装进 skills 目录）；参考实现见 [yhai3596/alan-platform](https://github.com/yhai3596/alan-platform)。做纯展示静态站用不到它。
+
+### 不随本仓库分发的东西
+
+SKILL.md 提到但**不包含**在内，本机没有就自动跳过、不影响主流程：`frontend-ui-design`、`app-dev-guide`（作者本机的其他 skill）。
 
 ## 文件地图
 
+- `install.sh` — 一键安装编排层 + 全部编队（含目录名→技能名映射、环境自检）
 - `SKILL.md` — 编排主文件：5 阶段、门禁、技能路由表
 - `references/intake-questions.md` — P0 问诊题库（缺什么问什么，不轰炸）
 - `references/reference-galleries.md` — 参考画廊清单 + 三参考法 + 版权红线
 - `references/design-md-checklist.md` — DESIGN.md 十二节清单 + 确认门禁话术
-- `references/extraction-fallback.md` — 提取三通道手册 + agent-browser 卡死恢复手册（真实 Windows 排错沉淀）
+- `references/extraction-fallback.md` — 提取三通道手册 + agent-browser 卡死恢复手册
 - `references/review-loop.md` — 五问题走查法 + 素材规格单
 - `references/build-handoff.md` — 实现三路线（静态直建 / 平台站交接 / 存量改造）
-- `scripts/run-styleprobe.mjs` — Windows 提取驱动器：运行时复用 web-to-design-md 的 styleProbe 探针、直调 agent-browser win32 exe（规避原脚本在 Windows+Git Bash 的 which/spawnSync 通病）
+- `scripts/run-styleprobe.mjs` — 提取驱动器（跨平台）：运行时复用 web-to-design-md 的 styleProbe 探针，产出与原版同构的证据 JSON；Windows 上直调 agent-browser win32 exe，规避原脚本在 Git Bash 下的 which/spawnSync 通病
 
 ## 方法论来源
 
@@ -64,7 +101,9 @@ done
 
 ## 说明
 
-文档中的排错手册（stale daemon 恢复、`--debug` 坑位等）来自一台真实 Windows + Git Bash 机器的实测记录，个别路径为该机器写法（如 `C:\Users\YH`），换机使用时按自己环境对应即可——结论本身（上游 [#1118](https://github.com/vercel-labs/agent-browser/issues/1118) 卡死态、spawnSync 管道继承等）是平台通用的。
+- **平台**：macOS / Linux / Windows(Git Bash) 都能跑。`install.sh` 只依赖 git + bash。
+- **排错手册的来源**：`references/extraction-fallback.md` 里的 stale daemon 恢复、`--debug` 坑位等来自一台 Windows + Git Bash 机器的实测记录。结论本身（上游 [#1118](https://github.com/vercel-labs/agent-browser/issues/1118) 卡死态、spawnSync 管道继承等）平台通用，仅 Windows 特有的部分已在文中标注。
+- **升级**：`git pull && bash install.sh --force`。
 
 ## License
 
