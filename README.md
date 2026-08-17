@@ -16,20 +16,34 @@ P4 走查循环      浏览器双端截图对照 DESIGN.md 列 5 个具体问题
                  → ⛔ 门禁二：禁止推倒重写，素材问题走素材规格单
 ```
 
-## 安装
+## 安装（完整清单）
+
+**① 本体 + 参考站提取技能：**
 
 ```bash
 git clone https://github.com/yhai3596/design-first-website.git ~/.claude/skills/design-first-website
+git clone https://github.com/Paidax01/web-to-design-md.git ~/.claude/skills/website-to-design-md
 ```
 
-本 skill 是**编排层**，调用以下技能编队（需另行安装到 `~/.claude/skills/`）：
+**② taste 编队 7 技能**（上游仓库的子目录名 ≠ 技能名，用映射命令一次装齐）：
+
+```bash
+git clone https://github.com/Leonxlnx/taste-skill.git ./taste-skill-src
+for pair in taste-skill:design-taste-frontend image-to-code-skill:image-to-code \
+  imagegen-frontend-web:imagegen-frontend-web imagegen-frontend-mobile:imagegen-frontend-mobile \
+  brandkit:brandkit redesign-skill:redesign-existing-projects minimalist-skill:minimalist-ui; do
+  cp -r "./taste-skill-src/skills/${pair%%:*}" ~/.claude/skills/"${pair##*:}"
+done
+```
+
+**③ 可选**：[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)（参考站提取首选通道，`npm install -g agent-browser`；不装则走内置浏览器兜底通道）。
+
+**④ 按需**：P3「内容平台站」路线的工程蓝图套件 [yhai3596/ai-content-site-kit](https://github.com/yhai3596/ai-content-site-kit)——施工时 clone 到项目工作区即可（模板文档库，不装进 skills 目录）；其参考实现为公开仓库 [yhai3596/alan-platform](https://github.com/yhai3596/alan-platform)。
 
 | 编队技能 | 来源 |
 |---|---|
 | design-taste-frontend / image-to-code / imagegen-frontend-web / imagegen-frontend-mobile / brandkit / redesign-existing-projects / minimalist-ui | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
 | website-to-design-md（参考站 → DESIGN.md 提取） | [Paidax01/web-to-design-md](https://github.com/Paidax01/web-to-design-md) |
-
-参考站提取依赖 [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)（可选；不装则走内置浏览器兜底通道）。
 
 ## 文件地图
 

@@ -12,7 +12,7 @@
 
 ## 路线 B：内容平台站 → 交接 ai-content-site-kit
 
-站型=内容平台（文章/工具集/课程/后台）时，工程蓝图不在本 skill——交接 `E:\AICoding\templates\ai-content-site-kit\`：
+站型=内容平台（文章/工具集/课程/后台）时，工程蓝图不在本 skill——交接 [ai-content-site-kit](https://github.com/yhai3596/ai-content-site-kit)（本地无副本先 `git clone` 到项目工作区）：
 
 1. **先读它的 `README.md`**，按其 AI 使用协议行事（那边有完整的读取顺序）。
 2. **DESIGN.md 的落点**：本 skill 产出的 DESIGN.md 映射进 kit 的 `ds.css` 设计变量层（颜色/字体/间距 → CSS 变量；组件规则 → 其组件约定）。DESIGN.md 是设计事实源，kit 是工程事实源，冲突时设计问题以 DESIGN.md 为准、工程问题以 kit 铁律为准。

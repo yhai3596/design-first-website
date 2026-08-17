@@ -1,5 +1,13 @@
 # CHANGELOG — design-first-website
 
+## v1.0.2 (2026-08-17)
+
+第三方完整化：外部环境可完整安装并调用全链路。
+
+- **发布依赖套件**：ai-content-site-kit 公开至 https://github.com/yhai3596/ai-content-site-kit（本地 E:\AICoding\templates\ 目录在仓库重组中已消失，自会话转录重放 Write/Edit 恢复全部 9 文件后发布；kit 内本地路径引用全部改为公开仓库 URL，参考实现指向 yhai3596/alan-platform）。
+- **去本地化**：SKILL.md P3 与 build-handoff.md 对 kit 的 E:\ 本地路径 → GitHub URL；「与其他技能的边界」节标注按作者环境划界。
+- **README 完整安装清单**：本体 + web-to-design-md + taste 编队 7 技能（上游子目录名→技能名的映射安装命令，实测目录名核对）+ agent-browser（可选）+ kit（按需）。
+
 ## v1.0.1 (2026-07-22)
 
 agent-browser 本机修复与提取通道重构。

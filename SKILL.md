@@ -39,7 +39,7 @@ description: 设计先行的网站开发编排流程——用户想做网站/个
 ### P3 · 实现（确认后才进入）
 - 施工纪律：严格按 DESIGN.md；**不新增主色**；不抄参考的品牌素材；桌面+移动双端；实现质量执行 `design-taste-frontend` 标准；单次写入 ≤10k 字符（预超先拆分片）；小步 commit。
 - **静态站**：直接实现（单页或少页，无构建优先）。
-- **内容平台站**：读 [references/build-handoff.md](references/build-handoff.md) 交接 `E:\AICoding\templates\ai-content-site-kit\`（DESIGN.md 喂它的 ds.css 变量层，工程按其 P0-P7 施工）。
+- **内容平台站**：读 [references/build-handoff.md](references/build-handoff.md) 交接 [ai-content-site-kit](https://github.com/yhai3596/ai-content-site-kit)（DESIGN.md 喂它的 ds.css 变量层，工程按其 P0-P7 施工；本地已有 clone 可直接用）。
 - **改造存量**：调 `redesign-existing-projects` 流程。
 
 ### P4 · 走查循环 → ⛔ 门禁二
@@ -55,8 +55,8 @@ description: 设计先行的网站开发编排流程——用户想做网站/个
 3. **内置浏览器兜底**：仅 agent-browser 整体故障时用（明示降级，告知用户一句）。
 命令挂起 >20 秒 = daemon 卡死（上游 #1118），按分册「卡死恢复手册」PID 精确清理后重试；提取时**禁用 `--debug`**（daemon 会随控制台死亡）。
 
-## 与其他技能的边界
+## 与其他技能的边界（按作者环境划界，环境里没有的忽略即可）
 
-- `frontend-ui-design`（已有）：单独的界面实现质量技能；本 skill 是端到端流程，实现阶段的质量标准优先用 taste 编队。
+- `frontend-ui-design`：单独的界面实现质量技能；本 skill 是端到端流程，实现阶段的质量标准优先用 taste 编队。
 - `app-dev-guide`：通用 App 开发流程；网站类需求走本 skill。
-- `ai-content-site-kit`（模板库，非 skill）：内容平台站的工程蓝图，本 skill 的 P3 下游。
+- [ai-content-site-kit](https://github.com/yhai3596/ai-content-site-kit)（模板文档库，非 skill）：内容平台站的工程蓝图，本 skill 的 P3 下游。
